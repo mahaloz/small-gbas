@@ -29,3 +29,18 @@ I've included some tiny gbas for others to use for fuzzing seeds in here.
 
 And a source file of `main.c` to start you off with some source for `small.gba`.
 
+## Starting code
+Based on this
+[blog](https://www.reinterpretcast.com/writing-a-game-boy-advance-game):
+```c
+int main(void)
+{
+    volatile unsigned char *ioram = (unsigned char *)0x04000000;
+    ioram[0] = 0x03; // Use video mode 3 (in BG2, a 16bpp bitmap in VRAM)
+    ioram[1] = 0x04; // Enable BG2 (BG0 = 1, BG1 = 2, BG2 = 4, ...)
+    volatile unsigned short *vram = (unsigned short *)0x06000000;
+    vram[80*240 + 115] = 0x001F; // X = 115, Y = 80, C = 000000000011111 = R
+    while(1);
+    return 0;
+}
+```
